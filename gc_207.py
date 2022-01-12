@@ -1,9 +1,10 @@
-""" gc_205.py """
+""" gc_207.py """
 # <実行時間>
 #
 # <説明>
 # プロット用
-#
+# gn_**ev_eury1p6RJ_lam6_y1p5RE_20211128_1.txt
+# を描画するためのpythonファイル
 
 
 # %% ライブラリのインポート
@@ -77,8 +78,8 @@ A3 = 4*3.1415*me/(mu*Mdip*e)    # ドリフト速度の係数
 
 
 # %% Europa Position
-lam = 10.0
-REr = 9.6*RJ  # 木星からEuropa公転軌道までの距離
+lam = 6.0
+REr = 6.7E+8  # 木星からEuropa公転軌道までの距離
 
 # 木星とtrace座標系原点の距離(x軸の定義)
 R0 = REr*(np.cos(np.radians(lam)))**(-2)
@@ -88,7 +89,7 @@ R0z = 0
 
 # Europaのtrace座標系における位置
 eurx = REr*math.cos(math.radians(lam)) - R0
-eury = 0
+eury = 1.6*RJ
 eurz = REr*math.sin(math.radians(lam))
 
 
@@ -277,10 +278,10 @@ def perarea(Xmesh, Ymesh, H):
     for j in range(nphi):
         s += dphi
 
-    # s = s * REU**2
+    # s = s * RE**2
 
     # 緯度経度マップ上のグリッドで規格化する
-    s = dtheta * dphi
+    # s = dtheta * dphi
 
     # 単位面積あたりにする[m^-2]
     H = H/s
@@ -292,7 +293,7 @@ def perarea(Xmesh, Ymesh, H):
 #
 # %% 着地点の余緯度と経度を調べる
 @jit
-def prefind(xyz0, aeq, energy, vdotn):
+def prefind(xyz0, aeq):
     # 電子の座標(Europa centric)
     # x... anti jovian
     # y... corotation
@@ -310,16 +311,16 @@ def prefind(xyz0, aeq, energy, vdotn):
     maparray = np.stack((phi, theta), 1)
 
     # ヒストグラム作成時の重みづけ
-    w = np.abs(vdotn)  # m s-1
-    w = w * 100     # cm s-1
+    RR = np.sqrt((x+R0x)**2 + (y+R0y)**2 + (z+R0z)**2)
+    w = RR*omgR*100
 
     # ヒストグラムの作成
-    # k = int(1 + np.log2(21*216000))
+    k = int(1 + np.log2(4760000))
     maparray = np.degrees(maparray)
-    # xedges = list(np.linspace(-180, 180, 180))
-    # yedges = list(np.linspace(0, 180, int(len(xedges)/2)))
-    xedges = list(np.linspace(-180, 180, 80))
-    yedges = list(np.linspace(0, 180, 40))
+    xedges = list(np.linspace(-180, 180, 72))
+    yedges = list(np.linspace(0, 180, int(len(xedges)/2)))
+    # xedges = list(np.linspace(-180, 180, k))
+    # yedges = list(np.linspace(0, 180, int(k/2)))
 
     H, xedges, yedges = np.histogram2d(
         maparray[:, 0], maparray[:, 1], bins=(xedges, yedges),
@@ -331,7 +332,7 @@ def prefind(xyz0, aeq, energy, vdotn):
     X, Y = np.meshgrid(xedges, yedges)
 
     # 単位面積あたりに変換[m^-2]
-    # H = perarea(X, Y, H)
+    H = perarea(X, Y, H)
 
     # dphi = X[0, 1]-X[0, 0]
     # dtheta = Y[1, 0]-Y[0, 0]
@@ -353,7 +354,7 @@ def mapplot(H, X, Y):
                    '180$^\\circ$W', '90$^\\circ$W', '0$^\\circ$']
 
     # 図のタイトル
-    title = 'colatitude-w. longitude, 4.5$^\\circ$-bin, $\\lambda=$' + \
+    title = 'colatitude-w. longitude, 5$^\\circ$-bin, $\\lambda=$' + \
         str(lam) + '$^\\circ$'
 
     # 描画
@@ -587,31 +588,21 @@ def diskmapplot(rxyza, mrrot, obs, energy):
 def dataload(filepath):
     # 座標&ピッチ角ファイル
     a0 = np.loadtxt(filepath)
-    # a0[:, 0] ... 出発点 x座標
-    # a0[:, 1] ... 出発点 y座標
-    # a0[:, 2] ... 出発点 z座標
-    # a0[:, 3] ... 終点 x座標
-    # a0[:, 4] ... 終点 y座標
-    # a0[:, 5] ... 終点 z座標
-    # a0[:, 6] ... yn (=1)
-    # a0[:, 7] ... 終点 energy [eV]
-    # a0[:, 8] ... 終点 alpha_eq [RADIANS]
-    # a0[:, 9] ... 出発点 v_dot_n
-
-    # nan除外
-    a0 = a0[np.where(~np.isnan(a0).any(axis=1))]
-
-    # vdotn < 0 のみが適切
-    a0 = a0[np.where(a0[:, 9] < 0)]
-    print('vdotn: ', a0[:, 9])
+    # データの中身
+    # 0 表面 x座標
+    # 1 表面 y座標
+    # 2 表面 z座標
+    # 3 磁力線 x座標
+    # 4 磁力線 y座標
+    # 5 磁力線 z座標
+    # 6 磁気赤道面ピッチ角
 
     # 表面着地点座標 & ピッチ角 (検索は表面y座標=1列目)
-    xyz = a0[:, 0:3]
-    energy = a0[:, 7]
-    aeq = a0[:, 8]
-    vdotn = a0[:, 9]
+    surface = a0[np.where(a0[:, 2] != 0)]
+    xyz = surface[:, 0:3]
+    aeq = surface[:, 6]
 
-    return xyz, energy, aeq, vdotn
+    return xyz, aeq
 
 
 #
@@ -626,27 +617,38 @@ def dataload(filepath):
 
 # エネルギー一覧
 enlist = list([10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-               200, 300, 400, 500, 700, 1000,
-               2000, 3000, 4000, 5000, 7000, 10000,
-               20000])
+               200, 300, 400, 500, 1000, 10000])
 devlist = list([10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
-                100, 100, 100, 100, 200, 300,
-                1000, 1000, 1000, 1000, 2000, 3000,
-                10000])
+                100, 100, 100, 100, 500, 10000])
+
+# enlist = list([10, 20])
+# devlist = list([10, 10])
+
+# データの中身
+# 0 表面 x座標
+# 1 表面 y座標
+# 2 表面 z座標
+# 3 磁力線 x座標
+# 4 磁力線 y座標
+# 5 磁力線 z座標
+# 6 磁気赤道面ピッチ角
 
 # 描画
 # ヒストグラム初期化
 H = 0
 # ヒストグラム積分
 for i in range(len(enlist)):
-    filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g_' + \
-        str(int(enlist[i]))+'ev_20220109_1.txt'
-    xyz0, energy0, aeq0, vdotn0 = dataload(filepath0)
-    print(vdotn0)
+    filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gn_' + \
+        str(int(enlist[i]))+'ev_eury1p6RJ_lam6_y1p5RE_20211128_1.txt'
+    xyz0, aeq0 = dataload(filepath0)
+
+    r = np.sqrt((xyz0[:, 0]-eurx)**2 + (xyz0[:, 1]-eury)
+                ** 2 + (xyz0[:, 2]-eurz)**2)
+    print('radii: ', r/RE)
 
     # 緯度経度ヒストグラム作成
     rxyza = Europacentric(xyz0, aeq0)   # Europa中心座標に
-    H0, X, Y = prefind(rxyza, energy0, aeq0, vdotn0)
+    H0, X, Y = prefind(rxyza, aeq0)
 
     # print(N1)
     # r1 = (maxwell(enlist[i])*160)/N1    # 変換係数
@@ -657,7 +659,7 @@ for i in range(len(enlist)):
     v1 = np.sqrt((enlist[i]-dev)*2*(-e)/me)
     v2 = np.sqrt((enlist[i])*2*(-e)/me)
     dv = v2 - v1
-    f_dalpha = 1/60
+    f_dalpha = 1/140
     print(str(enlist[i])+'eV fv =', fv2)
 
     H += H0*fv2*dv*f_dalpha
@@ -705,8 +707,8 @@ print('trailing south/north: ',
       np.average(H_trail_south30)/np.average(H_trail_north30))
 
 # 後行半球の南北極域30度を比較
-H_trail_north30 = H[0:8, 0:int(H.shape[1]/2)]
-H_trail_south30 = H[-8:, 0:int(H.shape[1]/2)]
+H_trail_north30 = H[0:6, 0:int(H.shape[1]/2)]
+H_trail_south30 = H[-6:, 0:int(H.shape[1]/2)]
 print('======')
 print('H_trail_south30 ave.: ', np.average(H_trail_south30))
 print('H_trail_north30 ave.: ', np.average(H_trail_north30))
