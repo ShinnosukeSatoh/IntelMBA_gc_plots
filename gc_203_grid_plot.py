@@ -1,9 +1,9 @@
-""" gc_205.py """
-# <実行時間>
-#
-# <説明>
-# プロット用
-#
+""" gc_203_grid_plot.py
+
+Created on Fri Jan 14 2022
+@author: Shin Satoh
+
+"""
 
 
 # %% ライブラリのインポート
