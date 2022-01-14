@@ -12,12 +12,13 @@ from numba import jit
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-from matplotlib import rc
+# import matplotlib.ticker as mticker
+# from matplotlib import rc
 # import matplotlib.patches as patches
 # from mpl_toolkits.mplot3d import Axes3D
-import time
+# import time
 
-from numpy.lib.npyio import savez_compressed
+# from numpy.lib.npyio import savez_compressed
 # from multiprocessing import Pool
 
 # from numpy.lib.function_base import _flip_dispatcher
@@ -351,28 +352,29 @@ def mapplot(H, X, Y):
     # x軸ラベル(標準的なwest longitude)
     xticklabels = ['360$^\\circ$W', '270$^\\circ$W',
                    '180$^\\circ$W', '90$^\\circ$W', '0$^\\circ$']
+    yticklabels = ['90$^\\circ$N', '45$^\\circ$N',
+                   '0$^\\circ$', '45$^\\circ$S', '90$^\\circ$S']
 
     # 図のタイトル
-    title = 'colatitude-w. longitude, 4.5$^\\circ$-bin, $\\lambda=$' + \
+    title = 'Latitude-West Longitude, $\\lambda=$' + \
         str(lam) + '$^\\circ$'
 
     # 描画
     fig, ax = plt.subplots(figsize=(8, 4))
     # ax.set_aspect(1)
-    ax.set_title(title, fontsize=10)
-    ax.set_xlabel('West Longitude', fontsize=9)
-    ax.set_ylabel('Colatitude', fontsize=9)
+    ax.set_title(title, fontsize=12)
+    ax.set_xlabel('West Longitude', fontsize=12)
+    ax.set_ylabel('Latitude', fontsize=12)
     ax.set_xticks(np.linspace(-180, 180, 5))
     ax.set_yticks(np.linspace(0, 180, 5))
-    ax.set_xticklabels(xticklabels)
-    ax.set_yticklabels(['0$^\\circ$', '45$^\\circ$', '90$^\\circ$',
-                        '135$^\\circ$', '180$^\\circ$'])
+    ax.set_xticklabels(xticklabels, fontsize=12)
+    ax.set_yticklabels(yticklabels, fontsize=12)
     ax.invert_yaxis()
-    mappable0 = ax.pcolormesh(X, Y, H, cmap='magma',
-                              vmin=0)
+    mappable0 = ax.pcolormesh(X, Y, H, cmap='magma', vmin=0)
     pp = fig.colorbar(mappable0, orientation='vertical')
-    # pp.set_label('electrons s$^{-1}$ cm$^{-2}$', fontsize=10)   # フラックス
-    pp.set_label('cm$^{-2}$ s$^{-1}$', fontsize=10)   # 密度
+    pp.set_label('Precipitation Flux [cm$^{-2}$ s$^{-1}$]', fontsize=12)
+    pp.ax.tick_params(labelsize=12)
+    pp.ax.yaxis.get_offset_text().set_fontsize(12)
     fig.tight_layout()
 
     plt.show()
@@ -452,7 +454,7 @@ def diskmapplot(rxyza, mrrot, obs, energy):
     # x-z平面に描画
 
     # ヒストグラム作成時の重みづけ
-    aeq = rxyza[:, 3]
+    # aeq = rxyza[:, 3]
     w = 1 / (omgR * (rxyza[:, 0] + eurx + R0))
     rxyzaw = np.stack((
         rxyza[:, 0]/RE,    # 0: X'座標(Europa中心)(REで規格化)
@@ -464,7 +466,7 @@ def diskmapplot(rxyza, mrrot, obs, energy):
     # w = w * 0.0031*np.exp(-((90-np.degrees(aeq))/22.5)**2)
 
     # ヒストグラム作成時の重みづけ
-    aeq = rxyza[:, 3]
+    # aeq = rxyza[:, 3]
 
     # ヒストグラムの作成
     resolution = 36
@@ -545,8 +547,8 @@ def diskmapplot(rxyza, mrrot, obs, energy):
     # ディスク描画
     # メッシュの作成
     X, Z = np.meshgrid(xedges, zedges)
-    X_lim = np.where((X[:-1, :-1] < -0.3) | (X[:-1, :-1] > 0.3))
-    Z_lim = np.where((Z[:-1, :-1] < -0.3) | (Z[:-1, :-1] > 0.3))
+    # X_lim = np.where((X[:-1, :-1] < -0.3) | (X[:-1, :-1] > 0.3))
+    # Z_lim = np.where((Z[:-1, :-1] < -0.3) | (Z[:-1, :-1] > 0.3))
     # H_disk[X_lim] = 0
     # H_disk[Z_lim] = 0
 
@@ -659,7 +661,7 @@ for i in range(len(enlist)):
     v1 = np.sqrt((enlist[i]-dev)*2*(-e)/me)
     v2 = np.sqrt((enlist[i])*2*(-e)/me)
     dv = v2 - v1
-    f_dalpha = 1/60
+    f_dalpha = 1/60     # 各ビンから放出する粒子の数で決まる
     print(str(enlist[i])+'eV fv =', fv2)
 
     H += H0*fv2*dv*f_dalpha
