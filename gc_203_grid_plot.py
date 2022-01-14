@@ -625,11 +625,13 @@ def dataload(filepath):
 # dv = math.sqrt((20/me)*2*float(1.602E-19))
 
 # エネルギー一覧
-enlist = list([10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+enlist = list([5, 10,
+               20, 30, 40, 50, 60, 70, 80, 90, 100,
                200, 300, 400, 500, 700, 1000,
                2000, 3000, 4000, 5000, 7000, 10000,
                20000])
-devlist = list([10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
+devlist = list([5, 5,
+                10, 10, 10, 10, 10, 10, 10, 10, 10,
                 100, 100, 100, 100, 200, 300,
                 1000, 1000, 1000, 1000, 2000, 3000,
                 10000])
@@ -640,7 +642,7 @@ H = 0
 # ヒストグラム積分
 for i in range(len(enlist)):
     filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g_' + \
-        str(int(enlist[i]))+'ev_20220109_4.txt'
+        str(int(enlist[i]))+'ev_omgR2_1_20220113.txt'
     xyz0, energy0, aeq0, vdotn0 = dataload(filepath0)
     print(vdotn0)
 
