@@ -644,7 +644,7 @@ H = 0
 # ヒストグラム積分
 for i in range(len(enlist)):
     filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g_' + \
-        str(int(enlist[i]))+'ev_omgR2_1_20220113.txt'
+        str(int(enlist[i]))+'ev_omgR2_1_20220117.txt'
     xyz0, energy0, aeq0, vdotn0 = dataload(filepath0)
     print(vdotn0)
 
