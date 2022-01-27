@@ -79,7 +79,7 @@ A3 = 4*3.1415*me/(mu*Mdip*e)        # ドリフト速度の係数
 #
 #
 # %% EUROPA POSITION (DETERMINED BY MAGNETIC LATITUDE)
-lam = 6.0
+lam = 10.0
 L96 = 9.6*RJ  # Europa公転軌道 L値
 
 # 木星とtrace座標系原点の距離(x軸の定義)
@@ -226,7 +226,7 @@ def ax0(H, X, Y):
     """
 
     fig.tight_layout()
-    fig.savefig('img.png', transparent=True)
+    fig.savefig('gc_contour_lam10.png', transparent=True)
     plt.show()
 
     return 0

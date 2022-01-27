@@ -654,13 +654,15 @@ def main():
     """
 
     # エネルギー
-    energy = 10000
-    denergy = 3000
+    energy = 7000
+    denergy = 2000
     # veq = math.sqrt((energy/me)*2*float(1.602E-19))
 
     # ファイル読み込み
-    filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g_' + \
-        str(energy)+'ev_omgR2_002_20220115.txt'
+    # filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g_' + \
+    #     str(energy)+'ev_omgR2_1_20220123.txt'
+    filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g2_' + \
+        str(energy)+'ev_alp_1_20220127.txt'
 
     # 座標&ピッチ角ファイル
     a0 = np.loadtxt(filepath0)
