@@ -643,8 +643,8 @@ devlist = list([5, 5,
 H = 0
 # ヒストグラム積分
 for i in range(len(enlist)):
-    filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g_' + \
-        str(int(enlist[i]))+'ev_alp_1_20220127.txt'
+    filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g3d_' + \
+        str(int(enlist[i]))+'ev_alp_025_20220201.txt'
     xyz0, energy0, aeq0, vdotn0 = dataload(filepath0)
     print(vdotn0)
 

@@ -328,7 +328,7 @@ def mapplot(maparray, x, vdotn, energy, denergy):
     # nsin = 0
     # w = 1 / (omgR * (x + eurx + R0))
     # w = w * np.sin(aeq)**(nsin)
-    w = vdotn
+    # w = vdotn   # 重みづけ
 
     # ヒストグラムの作成
     # k = int(1 + np.log2(216000))
@@ -654,15 +654,15 @@ def main():
     """
 
     # エネルギー
-    energy = 7000
-    denergy = 2000
+    energy = 5
+    denergy = 5
     # veq = math.sqrt((energy/me)*2*float(1.602E-19))
 
     # ファイル読み込み
     # filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g_' + \
     #     str(energy)+'ev_omgR2_1_20220123.txt'
-    filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g2_' + \
-        str(energy)+'ev_alp_1_20220127.txt'
+    filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g3d_' + \
+        str(energy)+'ev_alp_025_20220201.txt'
 
     # 座標&ピッチ角ファイル
     a0 = np.loadtxt(filepath0)
@@ -678,7 +678,7 @@ def main():
     # a0[:, 9] ... 出発点 v_dot_n
 
     print(np.where(np.isnan(a0).any(axis=1)))
-    print(a0[np.where(np.isnan(a0).any(axis=1))])
+    print(a0[np.where(np.isnan(a0).any(axis=1))].shape)
     # a0 = a0[np.where(np.isnan(a0).any(axis=1))]
 
     a0 = a0[np.where(a0[:, 9] < 0)]  # vdotn < 0 のみが適切
