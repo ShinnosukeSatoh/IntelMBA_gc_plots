@@ -631,12 +631,12 @@ enlist = list([5, 10,
                20, 30, 40, 50, 60, 70, 80, 90, 100,
                200, 300, 400, 500, 700, 1000,
                2000, 3000, 4000, 5000, 7000, 10000,
-               20000])
+               20000, 50000])
 devlist = list([5, 5,
                 10, 10, 10, 10, 10, 10, 10, 10, 10,
                 100, 100, 100, 100, 200, 300,
                 1000, 1000, 1000, 1000, 2000, 3000,
-                10000])
+                10000, 30000])
 
 # 描画
 # ヒストグラム初期化
@@ -644,7 +644,7 @@ H = 0
 # ヒストグラム積分
 for i in range(len(enlist)):
     filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g3d_' + \
-        str(int(enlist[i]))+'ev_alp_025_20220201.txt'
+        str(int(enlist[i]))+'ev_alp_001_20220201.txt'
     xyz0, energy0, aeq0, vdotn0 = dataload(filepath0)
     print(vdotn0)
 

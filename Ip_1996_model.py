@@ -44,11 +44,11 @@ if richtext == 'y':
     #    \sisetup{detect-all}    # force siunitx to use the fonts
 
 RE = 1.5E+6
-x_array = np.linspace(-5*RE, 5*RE, 1000)
+x_array = np.linspace(-1.1*RE, 1.1*RE, 1000)
 y_array = x_array
 xmesh, ymesh = np.meshgrid(x_array, y_array)
 
-a = 0.75
+a = 0.01
 V0 = 76*1E+3  # m/s
 Rc = RE
 
@@ -65,10 +65,10 @@ ax.set_xlabel('x', fontsize=12)
 ax.set_ylabel('y', fontsize=12)
 mappable0 = ax.pcolormesh(xmesh/RE, ymesh/RE,
                           np.sqrt(Vx**2 + Vy**2)/1000, cmap='magma', vmin=0, vmax=200, shading='auto')
-plt.quiver(xmesh[::40, ::40]/RE, ymesh[::40, ::40]/RE, Vx[::40, ::40]/5000, Vy[::40,
-           ::40]/5000, color='k', angles='xy', scale_units='xy', scale=100)  # ベクトル場をプロット
+plt.quiver(xmesh[::50, ::50]/RE, ymesh[::50, ::50]/RE, Vx[::50, ::50]/4000, Vy[::50,
+           ::50]/4000, color='k', angles='xy', scale_units='xy', scale=100)  # ベクトル場をプロット
 pp = fig.colorbar(mappable0, orientation='vertical')
-pp.set_label('Precipitation Flux [cm$^{-2}$ s$^{-1}$]', fontsize=12)
+pp.set_label('Plasma Flow Velocity [km s$^{-1}$]', fontsize=12)
 pp.ax.tick_params(labelsize=12)
 pp.ax.yaxis.get_offset_text().set_fontsize(12)
 plt.show()
@@ -81,7 +81,7 @@ ax.set_ylabel('y', fontsize=12)
 mappable0 = ax.pcolormesh(xmesh/RE, ymesh/RE, Vx/1000,
                           vmin=-120, vmax=120, cmap='magma', shading='auto')
 pp = fig.colorbar(mappable0, orientation='vertical')
-pp.set_label('Precipitation Flux [cm$^{-2}$ s$^{-1}$]', fontsize=12)
+pp.set_label('Plasma Flow Velocity [km s$^{-1}$]', fontsize=12)
 pp.ax.tick_params(labelsize=12)
 pp.ax.yaxis.get_offset_text().set_fontsize(12)
 plt.show()
@@ -94,7 +94,7 @@ ax.set_ylabel('y', fontsize=12)
 mappable0 = ax.pcolormesh(xmesh/RE, ymesh/RE, Vy/1000,
                           vmin=-120, vmax=120, cmap='magma', shading='auto')
 pp = fig.colorbar(mappable0, orientation='vertical')
-pp.set_label('Precipitation Flux [cm$^{-2}$ s$^{-1}$]', fontsize=12)
+pp.set_label('Plasma Flow Velocity [km s$^{-1}$]', fontsize=12)
 pp.ax.tick_params(labelsize=12)
 pp.ax.yaxis.get_offset_text().set_fontsize(12)
 plt.show()

@@ -113,6 +113,53 @@ def Bfield(x, y, z):
 #
 # %%
 @jit(nopython=True, fastmath=True)
+def crosssection(en):
+    E = 0.968640893964833
+    Eij = 14.26                    # eV
+    X = en/Eij
+    C0 = 0.48000650E-01
+    C1 = -0.77856300E-01
+    C2 = -0.39284400E-01
+    C3 = 0
+    C4 = -0.53260800
+    C5 = 0.47435400
+    C6 = -0.47435400
+    C7 = 0.16287750
+    C8 = 0.16596000
+
+    OMGx_1 = (C0*(1-(1/X))/(X**2) + C1*(X-1)*np.exp(-C8*X) + C2*(X-1)*np.exp(-2*C8*X) +
+              C3*(X-1)*np.exp(-3*C8*X) + C4*(X-1)*np.exp(-4*C8*X) + C5 + C6/X + C7*np.log(X))
+    Qx_1 = OMGx_1/(E*X)
+    Qx_1 = Qx_1*(8.8E-17)
+
+    Eij = 37.50                    # eV
+    X = en/Eij
+    C0 = 0.25263500E-02
+    C1 = -0.40977000E-02
+    C2 = -0.20676000E-02
+    C3 = 0
+    C4 = 0.28032000E-01
+    C5 = -0.24966000E-01
+    C6 = -0.24966000E-01
+    C7 = 0.85725000E-02
+    C8 = 0.16596000
+
+    OMGx_2 = (C0*(1-(1/X))/(X**2) + C1*(X-1)*np.exp(-C8*X) + C2*(X-1)*np.exp(-2*C8*X) +
+              C3*(X-1)*np.exp(-3*C8*X) + C4*(X-1)*np.exp(-4*C8*X) + C5 + C6/X + C7*np.log(X))
+
+    Qx_2 = OMGx_2/(E*X)
+    # Qx_2[np.where(ev<Eij)] = 0
+    Qx_2 = Qx_2*(8.8E-17)
+
+    Qx = 0.95*Qx_1+0.05*+Qx_2
+
+    return Qx
+
+
+#
+#
+# %%
+@jit(nopython=True, fastmath=True)
 def maxwell(en):
     # en: 電子のエネルギー [eV]
     v = math.sqrt((en/me)*2*float(1.602E-19))
@@ -627,13 +674,13 @@ def dataload(filepath):
 # dv = math.sqrt((20/me)*2*float(1.602E-19))
 
 # エネルギー一覧
-enlist = list([5, 10,
-               20, 30, 40, 50, 60, 70, 80, 90, 100,
+enlist = list([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15,
+               20, 25, 30, 40, 50, 60, 70, 80, 90, 100,
                200, 300, 400, 500, 700, 1000,
                2000, 3000, 4000, 5000, 7000, 10000,
                20000])
-devlist = list([5, 5,
-                10, 10, 10, 10, 10, 10, 10, 10, 10,
+devlist = list([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5,
+                5, 5, 5, 10, 10, 10, 10, 10, 10, 10,
                 100, 100, 100, 100, 200, 300,
                 1000, 1000, 1000, 1000, 2000, 3000,
                 10000])
@@ -644,7 +691,7 @@ H = 0
 # ヒストグラム積分
 for i in range(len(enlist)):
     filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g_' + \
-        str(int(enlist[i]))+'ev_omgR2_1_20220123.txt'
+        str(int(enlist[i]))+'ev_omgR2_01_20220224.txt'
     xyz0, energy0, aeq0, vdotn0 = dataload(filepath0)
     print(vdotn0)
 

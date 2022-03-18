@@ -646,23 +646,23 @@ def main():
     enlist = list([10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
                   200, 300, 400, 500, 700, 1000,
                   2000, 3000, 4000, 5000, 7000, 10000,
-                  20000])
+                  20000, 50000])
     devlist = list([10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
                    100, 100, 100, 100, 200, 300,
                    1000, 1000, 1000, 1000, 2000, 3000,
-                   10000])
+                   10000, 30000])
     """
 
     # エネルギー
-    energy = 5
-    denergy = 5
+    energy = 10000
+    denergy = 3000
     # veq = math.sqrt((energy/me)*2*float(1.602E-19))
 
     # ファイル読み込み
     # filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g_' + \
-    #     str(energy)+'ev_omgR2_1_20220123.txt'
-    filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc203g3d_' + \
-        str(energy)+'ev_alp_025_20220201.txt'
+    #     str(energy)+'ev_omgR2_01_20220114.txt'
+    filepath0 = '/Users/satoshin/Library/Mobile Documents/com~apple~CloudDocs/PPARC/gc301_' + \
+        str(energy)+'ev_alp_0.1_20220224.txt'
 
     # 座標&ピッチ角ファイル
     a0 = np.loadtxt(filepath0)
