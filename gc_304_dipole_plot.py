@@ -80,10 +80,16 @@ def xz_rot(x, z, theta):
     return xnew, znew
 
 
+MOON = 'IO'  # IO OR EUROPA
 RJ = 1
-RE = (1.5E+6)/(7E+7)
-req = 9.4*RJ
-lam = -10
+if MOON == 'IO':
+    RE = (1.8E+6)/(7E+7)
+    req = 5.9*RJ
+elif MOON == 'EUROPA':
+    RE = (1.5E+6)/(7E+7)
+    req = 9.4*RJ
+
+lam = 10
 
 # ダイポール軸
 x_axis = np.linspace(-2*RJ, 2*RJ, 3)*np.sin(np.radians(0))
@@ -91,12 +97,12 @@ z_axis = np.linspace(-2*RJ, 2*RJ, 3)*np.cos(np.radians(0))
 x_axis, z_axis = xz_rot(x_axis, z_axis, lam)
 
 # 磁気赤道面
-xeq = np.linspace(-1.25*RJ, 10*RJ, 3)
+xeq = np.linspace(-1.25*RJ, req*1.1, 3)
 zeq = xeq*0
 xeq, zeq = xz_rot(xeq, zeq, lam)
 
 # Europaの位置
-xe = 9.4*RJ
+xe = req
 ze = 0
 xer, zer = xz_rot(xe, ze, -lam)
 req_e = ((xer**2 + zer**2)**(3/2)) / (xer**2)
